@@ -1,0 +1,592 @@
+openapi: 3.0.0
+info:
+  description: API para la gestión de usuarios que consumiran los servicios de la
+    aplicación de tipo Netflix
+  title: Microservicio de Usuarios de una aplicación de tipo Netflix
+  version: 1.0.0
+servers:
+- url: /
+tags:
+- description: Representa uno de los usuarios que consumirán los servicios de la aplicación
+    de tipo Netflix
+  name: usuario
+paths:
+  /usuario:
+    get:
+      description: Retorna el conjunto de usuarios registrados en la aplicación
+      operationId: get_all_usuarios
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Usuario'
+                type: array
+            application/xml:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Usuario'
+                type: array
+          description: Se ha obtenido exitosamente la lista de usuarios
+        "500":
+          description: Error del servidor
+      summary: Obtener la lista de usuarios registrados en la aplicación
+      tags:
+      - usuario
+      x-openapi-router-controller: openapi_server.controllers.usuario_controller
+    post:
+      description: Crea una nueva cuenta en la aplicación que estará asociada a un
+        nuevo usuario
+      operationId: add_usuario
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: Usuario creado exitosamente
+        "400":
+          description: Entrada invalida
+        "422":
+          description: Excepción en la validación
+        "500":
+          description: Error del servidor
+      summary: Añadir un nuevo usuario a la aplicación
+      tags:
+      - usuario
+      x-openapi-router-controller: openapi_server.controllers.usuario_controller
+  /usuario/{idUsuario}:
+    delete:
+      description: Elimina un contenido multimedia específico de la aplicación en
+        función del identificador proporcionado
+      operationId: delete_usuario
+      parameters:
+      - description: ID del usuario a borrar
+        explode: false
+        in: path
+        name: idUsuario
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          description: Usuario eliminado exitosamente
+        "400":
+          description: ID proporcionado inválido
+        "404":
+          description: Contenido no encontrado
+        "500":
+          description: Error del servidor
+      summary: Eliminar un usuario específico por su ID
+      tags:
+      - usuario
+      x-openapi-router-controller: openapi_server.controllers.usuario_controller
+    get:
+      description: Retorna la información de un usuario en función del identificador
+        proporcionado
+      operationId: get_usuario_by_id
+      parameters:
+      - description: ID del usuario a devolver
+        explode: false
+        in: path
+        name: idUsuario
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: Se ha obtenido exitosamente los detalles del usuario
+        "400":
+          description: ID proporcionado inválido
+        "404":
+          description: Usuario no encontrado
+        "500":
+          description: Error del servidor
+      summary: Obtener un usuario específico por su ID
+      tags:
+      - usuario
+      x-openapi-router-controller: openapi_server.controllers.usuario_controller
+    put:
+      description: Actualiza la información de un usuario registrado en función del
+        identificador proporcionado
+      operationId: update_usuario
+      parameters:
+      - description: ID del usuario a actualizar
+        explode: false
+        in: path
+        name: idUsuario
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Usuario'
+          description: Se ha actualizado exitosamente los detalles del usuario
+        "400":
+          description: ID proporcionado inválido
+        "404":
+          description: Usuario no encontrado
+        "422":
+          description: Excepción en la validación
+        "500":
+          description: Error del servidor
+      summary: Actualizar un usuario específico por su ID
+      tags:
+      - usuario
+      x-openapi-router-controller: openapi_server.controllers.usuario_controller
+  /usuario/{idUsuario}/ListaFavoritos:
+    get:
+      description: Retorna el conjunto de contenidos multimedia favoritos de un usuario
+        específico en función de su identificador
+      operationId: get_favoritos
+      parameters:
+      - description: ID del usuario del que se obtendrá su lista de favoritos
+        explode: false
+        in: path
+        name: idUsuario
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Contenido'
+                type: array
+            application/xml:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Contenido'
+                type: array
+          description: Se ha obtenido exitosamente el listado de favoritos
+        "400":
+          description: ID proporcionado inválido
+        "404":
+          description: Usuario no encontrado
+        "500":
+          description: Error del servidor
+      summary: Obtener el listado de contenidos multimedia favoritos de un usuario
+        por su ID
+      tags:
+      - usuario
+      x-openapi-router-controller: openapi_server.controllers.usuario_controller
+    post:
+      description: Añade un nuevo contenido al conjunto de contenidos multimedia favoritos
+        de un usuario específico en función de su identificador
+      operationId: add_favorito
+      parameters:
+      - description: ID del usuario al que se le añadirá un contenido a su lista de
+          favoritos
+        explode: false
+        in: path
+        name: idUsuario
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContenidoFavorito'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/ContenidoFavorito'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contenido'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Contenido'
+          description: Contenido añadido exitosamente
+        "400":
+          description: ID proporcionado inválido
+        "422":
+          description: Excepción en la validación
+        "500":
+          description: Error del servidor
+      summary: Añadir un nuevo contenido al listado de favoritos de un usuario por
+        su ID
+      tags:
+      - usuario
+      x-openapi-router-controller: openapi_server.controllers.usuario_controller
+  /usuario/{idUsuario}/{ContenidoFavorito}:
+    delete:
+      description: Elimina un contenido multimedia perteneciente al listado de contenidos
+        favoritos de un usuario específico en función de su identificador
+      operationId: delete_contenido_favorito
+      parameters:
+      - description: ID del usuario del que se eliminará el contenido de su lista
+          de favoritos
+        explode: false
+        in: path
+        name: idUsuario
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      - description: ID del contenido marcado como favorito que se eliminará del listado
+          de favoritos
+        explode: false
+        in: path
+        name: ContenidoFavorito
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          description: ContenidoFavorito eliminado exitosamente
+        "400":
+          description: ID y/o ContenidoFavorito proporcionados inválidos
+        "404":
+          description: Usuario y/o ContenidoFavorito no encontrados
+        "500":
+          description: Error del servidor
+      summary: Eliminar un contenido multimedia marcado como favorito del listado
+        de favoritos de un usuario
+      tags:
+      - usuario
+      x-openapi-router-controller: openapi_server.controllers.usuario_controller
+    get:
+      description: Retorna un contenido multimedia perteneciente al listado de contenidos
+        favoritos de un usuario específico en función de su identificador
+      operationId: get_contenido_favorito
+      parameters:
+      - description: ID del usuario del que se obtendrá el contenido de su lista de
+          favoritos
+        explode: false
+        in: path
+        name: idUsuario
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      - description: ID del contenido marcado como favorito que se obtendrá
+        explode: false
+        in: path
+        name: ContenidoFavorito
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contenido'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Contenido'
+          description: Se ha obtenido el contenido perteneciente a favoritos exitosamente
+        "400":
+          description: ID y/o ContenidoFavorito proporcionados inválidos
+        "404":
+          description: Usuario o ContenidoFavorito no encontrados
+        "500":
+          description: Error del servidor
+      summary: Obtener un contenido multimedia marcado como favorito de un usuario
+      tags:
+      - usuario
+      x-openapi-router-controller: openapi_server.controllers.usuario_controller
+components:
+  schemas:
+    Usuario:
+      example:
+        idUsuario: 5
+        imagen:
+        - imagen
+        - imagen
+        favoritos:
+        - 10
+        - 10
+        nombre: Marcos
+        rol: administrador
+      properties:
+        idUsuario:
+          description: Identificador único del usuario
+          example: 5
+          title: idUsuario
+          type: integer
+        nombre:
+          description: Nombre del usuario
+          example: Marcos
+          title: nombre
+          type: string
+        rol:
+          description: Papel que desempeña el usuario en la aplicación en base de
+            las funciones que puede llevar a cabo
+          enum:
+          - administrador
+          - cliente
+          example: administrador
+          title: rol
+          type: string
+        imagen:
+          description: Fotografía del usuario de la aplicación
+          items:
+            type: string
+          title: imagen
+          type: array
+          xml:
+            wrapped: true
+        favoritos:
+          description: Representa la lista de contenidos multimedia de la aplicacion
+            que el usuario ha marcado como favoritos. Este array almacenará únicamente
+            el identificador de dichos contenidos con el fin de simplificar y facilitar
+            la implementación de la aplicación.
+          items:
+            $ref: '#/components/schemas/ContenidoFavorito'
+          title: favoritos
+          type: array
+      title: Usuario
+      type: object
+      xml:
+        name: usuario
+    ContenidoFavorito:
+      description: Identificador del contenido multimedia marcado como favorito por
+        el usuario
+      example: 10
+      title: ContenidoFavorito
+      type: integer
+    Contenido:
+      example:
+        tipo: serie
+        temporadas:
+        - episodios:
+          - tituloEpisodio: Celebration
+            numeroEpisodio: 5
+            duracionEpisodio: 60
+          - tituloEpisodio: Celebration
+            numeroEpisodio: 5
+            duracionEpisodio: 60
+          numeroTemporada: 1
+        - episodios:
+          - tituloEpisodio: Celebration
+            numeroEpisodio: 5
+            duracionEpisodio: 60
+          - tituloEpisodio: Celebration
+            numeroEpisodio: 5
+            duracionEpisodio: 60
+          numeroTemporada: 1
+        idContenido: 10
+        director: Mark Mylod
+        elenco: "Brian Cox, Jeremy Strong, Sarah Snook, Kieran Culkin, Hiam Abbass"
+        genero: drama
+        titulo: Succession
+        duracion: 120
+        imagen:
+        - imagen
+        - imagen
+        sinopsis: Familia de ricos
+      properties:
+        idContenido:
+          description: Identificador único del contenido
+          example: 10
+          title: idContenido
+          type: integer
+        titulo:
+          description: Nombre del contenido
+          example: Succession
+          title: titulo
+          type: string
+        tipo:
+          description: "Categoría multimedia a la cual pertenece el contenido (Pelí\
+            cula, documental, serie…)"
+          enum:
+          - serie
+          - pelicula
+          - corto
+          - documental
+          example: serie
+          title: tipo
+          type: string
+        sinopsis:
+          description: Resumen general e información referente al contenido
+          example: Familia de ricos
+          title: sinopsis
+          type: string
+        duracion:
+          description: Intervalo de tiempo en minutos que transcurre entre el comienzo
+            y el fin del contenido
+          example: 120
+          title: duracion
+          type: integer
+        temporadas:
+          description: "Conjunto de temporadas que conforman la serie (solo en el\
+            \ caso de que el contenido sea de tipo serie. Si el contenido no es de\
+            \ tipo serie este array estará vacío y no contendrá información útil).\
+            \ Este atributo se ha definido como un array de objetos, en el cual cada\
+            \ posición almacenará la información referente a una temporada, es decir,\
+            \ numeroTemporada y episodios"
+          items:
+            $ref: '#/components/schemas/Temporadas_inner'
+          title: temporadas
+          type: array
+        genero:
+          description: "Temática en la que puede clasificarse el contenido multimedia\
+            \ (Horror, comedia, romance, fantasía…)"
+          enum:
+          - horror
+          - aventura
+          - comedia
+          - thriller
+          - drama
+          - romance
+          - fantasia
+          - ciencia ficcion
+          example: drama
+          title: genero
+          type: string
+        director:
+          description: Responsable principal encargado de dirigir la filmación o rodaje
+            del contenido en términos artísticos
+          example: Mark Mylod
+          title: director
+          type: string
+        elenco:
+          description: "Conjunto de personas, normalmente los actores y actrices principales,\
+            \ que han participado en la producción y grabación del contenido"
+          example: "Brian Cox, Jeremy Strong, Sarah Snook, Kieran Culkin, Hiam Abbass"
+          items:
+            type: string
+          title: elenco
+          type: array
+        imagen:
+          description: Fotografía representativa del contenido multimedia
+          items:
+            type: string
+          title: imagen
+          type: array
+          xml:
+            wrapped: true
+      title: Contenido
+      type: object
+    Temporadas:
+      description: "Conjunto de temporadas que conforman la serie (solo en el caso\
+        \ de que el contenido sea de tipo serie. Si el contenido no es de tipo serie\
+        \ este array estará vacío y no contendrá información útil). Este atributo\
+        \ se ha definido como un array de objetos, en el cual cada posición almacenará\
+        \ la información referente a una temporada, es decir, numeroTemporada y episodios"
+      items:
+        $ref: '#/components/schemas/Temporadas_inner'
+      title: temporadas
+      type: array
+    Episodios:
+      description: "Listado de episodios que conforman la temporada a la que se está\
+        \ accediendo en el array. Este atributo se ha definido como un array de objetos,\
+        \ en el cual cada posición almacenará la información referente a un episodio\
+        \ de la temporada actual, es decir, numeroEpisodio, tituloEpisodio y duracionEpisodio"
+      items:
+        $ref: '#/components/schemas/Episodios_inner'
+      title: Episodios
+      type: array
+    Temporadas_inner:
+      example:
+        episodios:
+        - tituloEpisodio: Celebration
+          numeroEpisodio: 5
+          duracionEpisodio: 60
+        - tituloEpisodio: Celebration
+          numeroEpisodio: 5
+          duracionEpisodio: 60
+        numeroTemporada: 1
+      properties:
+        numeroTemporada:
+          description: Identifica el número de la temporada almacenada en la posición
+            actual del array
+          example: 1
+          title: numeroTemporada
+          type: integer
+        episodios:
+          description: "Listado de episodios que conforman la temporada a la que se\
+            \ está accediendo en el array. Este atributo se ha definido como un array\
+            \ de objetos, en el cual cada posición almacenará la información referente\
+            \ a un episodio de la temporada actual, es decir, numeroEpisodio, tituloEpisodio\
+            \ y duracionEpisodio"
+          items:
+            $ref: '#/components/schemas/Episodios_inner'
+          title: Episodios
+          type: array
+      title: Temporadas_inner
+      type: object
+    Episodios_inner:
+      example:
+        tituloEpisodio: Celebration
+        numeroEpisodio: 5
+        duracionEpisodio: 60
+      properties:
+        numeroEpisodio:
+          description: Identifica el número del episodio en la temporada a la que
+            se está accediendo
+          example: 5
+          title: numeroEpisodio
+          type: integer
+        tituloEpisodio:
+          description: Nombre del episodio
+          example: Celebration
+          title: tituloEpisodio
+          type: string
+        duracionEpisodio:
+          description: Intervalo de tiempo en minutos que transcurre entre el comienzo
+            y el fin del episodio
+          example: 60
+          title: duracionEpisodio
+          type: integer
+      title: Episodios_inner
+      type: object
