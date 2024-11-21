@@ -60,9 +60,9 @@ def add_usuario():  # noqa: E501
         if data['rol'] not in valid_rol:
             return {"error": "Rol Invalido. Roles validos: administrador, cliente"}, 422  # Código 422: Rol no válido
 
-        valid_imagen = ['imagen1.jpg', 'imagen2.jpg', 'imagen3.jpg', 'imagen4.jpg', 'imagen5.jpg']
+        valid_imagen = ['user1.jpg', 'user2.jpg', 'user3.jpg', 'user4.jpg', 'user5.jpg', 'user6.jpg']
         if data['imagen'] not in valid_imagen:
-            return {"error": "Imagen Invalida. Imagenes validas: imagen1.jpg, imagen2.jpg, imagen3.jpg, imagen4.jpg, imagen5.jpg"}, 422  # Código 422: Imagen no válida
+            return {"error": "Imagen Invalida. Imagenes validas: user1.jpg, user2.jpg, user3.jpg, user4.jpg, user5.jpg, user6.jpg"}, 422  # Código 422: Imagen no válida
 
     # Asignar los valores de los campos
         nombre = data['nombre']
