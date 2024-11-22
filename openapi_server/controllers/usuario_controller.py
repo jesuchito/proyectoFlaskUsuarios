@@ -30,7 +30,32 @@ def add_favorito(id_usuario, contenido_favorito):  # noqa: E501
 
     :rtype: Union[Contenido, Tuple[Contenido, int], Tuple[Contenido, int, Dict[str, str]]
     """
-    return 'do some magicsad'
+    try:
+        usuario = Usuarios.query.get(id_usuario)
+        if not usuario:
+            return {'error': 'Usuario no encontrado'}, 404
+
+        if contenido_favorito in usuario.contenidosfavoritos:
+            return {'error': 'El identificador ya está en favoritos'}, 400
+
+        usuario.contenidosfavoritos.append(contenido_favorito)
+        db.session.commit()
+
+        data_to_send = {
+            'contenidos_ids': usuario.contenidosfavoritos,
+        }
+
+        update_vista = 'http://localhost:8082/vista/Favoritos'
+
+        response = requests.put(update_vista, json=data_to_send)
+
+        if response.status_code == 200:
+            return {'message': 'Favorito añadido y enviado a Vista con éxito'}, 200
+        else:
+            return {'message': 'Favorito añadido, pero fallo en Vista', 'error': response.text}, response.status_code
+
+    except Exception as e:
+        return {'message': 'Ocurrió un error', 'error': str(e)}, 500
 
 
 def add_usuario():  # noqa: E501
@@ -103,7 +128,32 @@ def delete_contenido_favorito(id_usuario, contenido_favorito):  # noqa: E501
 
     :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    try:
+        usuario = Usuarios.query.get(id_usuario)
+        if not usuario:
+            return {'error': 'Usuario no encontrado'}, 404
+
+        if contenido_favorito not in usuario.contenidosfavoritos:
+            return {'error': 'El identificador no está en favoritos'}, 400
+
+        usuario.contenidosfavoritos.remove(contenido_favorito)
+        db.session.commit()
+
+        data_to_send = {
+            'contenidos_ids': usuario.contenidosfavoritos,
+        }
+
+        update_vista = 'http://localhost:8082/vista/Favoritos'
+
+        response = requests.put(update_vista, json=data_to_send)
+
+        if response.status_code == 200:
+            return {'message': 'Favorito eliminado y notificado a Vista con éxito'}, 200
+        else:
+            return {'message': 'Favorito eliminado, pero fallo en Vista', 'error': response.text}, response.status_code
+
+    except Exception as e:
+        return {'message': 'Ocurrió un error', 'error': str(e)}, 500
 
 
 def delete_usuario(id_usuario):  # noqa: E501
