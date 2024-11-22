@@ -31,14 +31,14 @@ def add_favorito(id_usuario, contenido_favorito):  # noqa: E501
     :rtype: Union[Contenido, Tuple[Contenido, int], Tuple[Contenido, int, Dict[str, str]]
     """
     try:
-        usuario = Usuarios.query.get(id_usuario)
+        usuario = db.session.query(Usuarios).get(id_usuario)
         if not usuario:
             return {'error': 'Usuario no encontrado'}, 404
-
+        
         if contenido_favorito in usuario.contenidosfavoritos:
             return {'error': 'El identificador ya está en favoritos'}, 400
-
-        usuario.contenidosfavoritos.append(contenido_favorito)
+        
+        usuario.contenidosfavoritos = usuario.contenidosfavoritos + [contenido_favorito]
         db.session.commit()
 
         data_to_send = {
@@ -50,7 +50,7 @@ def add_favorito(id_usuario, contenido_favorito):  # noqa: E501
         response = requests.put(update_vista, json=data_to_send)
 
         if response.status_code == 200:
-            return {'message': 'Favorito añadido y enviado a Vista con éxito'}, 200
+            return usuario.to_dict(), 200
         else:
             return {'message': 'Favorito añadido, pero fallo en Vista', 'error': response.text}, response.status_code
 
@@ -129,14 +129,14 @@ def delete_contenido_favorito(id_usuario, contenido_favorito):  # noqa: E501
     :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
     """
     try:
-        usuario = Usuarios.query.get(id_usuario)
+        usuario = db.session.query(Usuarios).get(id_usuario)
         if not usuario:
             return {'error': 'Usuario no encontrado'}, 404
 
         if contenido_favorito not in usuario.contenidosfavoritos:
             return {'error': 'El identificador no está en favoritos'}, 400
 
-        usuario.contenidosfavoritos.remove(contenido_favorito)
+        usuario.contenidosfavoritos = [fav for fav in usuario.contenidosfavoritos if fav != contenido_favorito]
         db.session.commit()
 
         data_to_send = {
@@ -148,7 +148,7 @@ def delete_contenido_favorito(id_usuario, contenido_favorito):  # noqa: E501
         response = requests.put(update_vista, json=data_to_send)
 
         if response.status_code == 200:
-            return {'message': 'Favorito eliminado y notificado a Vista con éxito'}, 200
+            return usuario.to_dict(), 200
         else:
             return {'message': 'Favorito eliminado, pero fallo en Vista', 'error': response.text}, response.status_code
 
