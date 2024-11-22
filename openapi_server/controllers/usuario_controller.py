@@ -18,7 +18,7 @@ def import_db_controller(database):
     db = database
 
 
-def add_favorito(id_usuario, body):  # noqa: E501
+def add_favorito(id_usuario, contenido_favorito):  # noqa: E501
     """Añadir un nuevo contenido al listado de favoritos de un usuario por su ID
 
     Añade un nuevo contenido al conjunto de contenidos multimedia favoritos de un usuario específico en función de su identificador # noqa: E501
@@ -30,7 +30,7 @@ def add_favorito(id_usuario, body):  # noqa: E501
 
     :rtype: Union[Contenido, Tuple[Contenido, int], Tuple[Contenido, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    return 'do some magicsad'
 
 
 def add_usuario():  # noqa: E501

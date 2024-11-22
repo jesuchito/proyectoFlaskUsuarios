@@ -215,51 +215,6 @@ paths:
       tags:
       - usuario
       x-openapi-router-controller: openapi_server.controllers.usuario_controller
-    post:
-      description: Añade un nuevo contenido al conjunto de contenidos multimedia favoritos
-        de un usuario específico en función de su identificador
-      operationId: add_favorito
-      parameters:
-      - description: ID del usuario al que se le añadirá un contenido a su lista de
-          favoritos
-        explode: false
-        in: path
-        name: idUsuario
-        required: true
-        schema:
-          format: int64
-          type: integer
-        style: simple
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ContenidoFavorito'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/ContenidoFavorito'
-        required: true
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Contenido'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Contenido'
-          description: Contenido añadido exitosamente
-        "400":
-          description: ID proporcionado inválido
-        "422":
-          description: Excepción en la validación
-        "500":
-          description: Error del servidor
-      summary: Añadir un nuevo contenido al listado de favoritos de un usuario por
-        su ID
-      tags:
-      - usuario
-      x-openapi-router-controller: openapi_server.controllers.usuario_controller
   /usuario/{idUsuario}/{ContenidoFavorito}:
     delete:
       description: Elimina un contenido multimedia perteneciente al listado de contenidos
@@ -341,6 +296,51 @@ paths:
         "500":
           description: Error del servidor
       summary: Obtener un contenido multimedia marcado como favorito de un usuario
+      tags:
+      - usuario
+      x-openapi-router-controller: openapi_server.controllers.usuario_controller
+    post:
+      description: Añade un nuevo contenido al conjunto de contenidos multimedia favoritos
+        de un usuario específico en función de su identificador
+      operationId: add_favorito
+      parameters:
+      - description: ID del usuario al que se le añadirá un contenido a su lista de
+          favoritos
+        explode: false
+        in: path
+        name: idUsuario
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      - description: ID del contenido marcado como favorito que se obtendrá
+        explode: false
+        in: path
+        name: ContenidoFavorito
+        required: true
+        schema:
+          format: int64
+          type: integer
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contenido'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Contenido'
+          description: Contenido añadido exitosamente
+        "400":
+          description: ID proporcionado inválido
+        "422":
+          description: Excepción en la validación
+        "500":
+          description: Error del servidor
+      summary: Añadir un nuevo contenido al listado de favoritos de un usuario por
+        su ID
       tags:
       - usuario
       x-openapi-router-controller: openapi_server.controllers.usuario_controller
