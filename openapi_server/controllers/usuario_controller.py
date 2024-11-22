@@ -18,7 +18,7 @@ def import_db_controller(database):
     db = database
 
 
-def add_favorito(id_usuario, body):  # noqa: E501
+def add_favorito(id_usuario, contenido_favorito):  # noqa: E501
     """Añadir un nuevo contenido al listado de favoritos de un usuario por su ID
 
     Añade un nuevo contenido al conjunto de contenidos multimedia favoritos de un usuario específico en función de su identificador # noqa: E501
@@ -30,7 +30,7 @@ def add_favorito(id_usuario, body):  # noqa: E501
 
     :rtype: Union[Contenido, Tuple[Contenido, int], Tuple[Contenido, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    return 'do some magicsad'
 
 
 def add_usuario():  # noqa: E501
@@ -60,9 +60,10 @@ def add_usuario():  # noqa: E501
         if data['rol'] not in valid_rol:
             return {"error": "Rol Invalido. Rol valido: cliente"}, 422  # Código 422: Rol no válido
 
-        valid_imagen = ['user1.jpg', 'user2.jpg', 'user3.jpg', 'user4.jpg', 'user5.jpg', 'user6.jpg']
+    # SOLO EL ADMINISTRADOR PODRA TENER LA FOTO DE PERFIL 'administrador.jpg' Y EL ROL 'administrador' -> AÑADIDO DIRECTAMENTE DE LA BASE DE DATOS
+        valid_imagen = ['user1.jpg', 'user2.jpg', 'user3.jpg', 'user4.jpg', 'user5.jpg', 'user6.jpg', 'administrador.jpg']
         if data['imagen'] not in valid_imagen:
-            return {"error": "Imagen Invalida. Imagenes validas: user1.jpg, user2.jpg, user3.jpg, user4.jpg, user5.jpg, user6.jpg"}, 422  # Código 422: Imagen no válida
+            return {"error": "Imagen Invalida. Imagenes validas: user1.jpg, user2.jpg, user3.jpg, user4.jpg, user5.jpg, user6.jpg (o administrador.jpg para el admin)"}, 422  # Código 422: Imagen no válida
 
     # Asignar los valores de los campos
         nombre = data['nombre']
