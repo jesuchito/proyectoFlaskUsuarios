@@ -56,9 +56,9 @@ def add_usuario():  # noqa: E501
                 return {"error": f"Missing field: {field}"}, 422  # Código 422: Falta un campo requerido
 
     # Validar los valores de 'rol' e 'imagen' (comprobamos si son válidos)
-        valid_rol = ['administrador', 'cliente']
+        valid_rol = ['cliente']
         if data['rol'] not in valid_rol:
-            return {"error": "Rol Invalido. Roles validos: administrador, cliente"}, 422  # Código 422: Rol no válido
+            return {"error": "Rol Invalido. Rol valido: cliente"}, 422  # Código 422: Rol no válido
 
         valid_imagen = ['user1.jpg', 'user2.jpg', 'user3.jpg', 'user4.jpg', 'user5.jpg', 'user6.jpg']
         if data['imagen'] not in valid_imagen:
@@ -115,7 +115,34 @@ def delete_usuario(id_usuario):  # noqa: E501
 
     :rtype: Union[None, Tuple[None, int], Tuple[None, int, Dict[str, str]]
     """
-    return 'do some magic!'
+    try:
+    # Asegurarse de que el ID proporcionado es un número entero
+        id_usuario = int(id_usuario)
+        
+    # Buscar el usuario en la base de datos
+        usuario = db.session.query(Usuarios).get(id_usuario)
+        
+        if usuario is None:
+        # Si el usuario no se encuentra, devolver un error 404
+            return jsonify({'error': 'Usuario no encontrado'}), 404
+
+    # Eliminar el usuario de la sesión actual si estaba en otra sesión
+        db.session.expunge(usuario)
+        
+    # Eliminar el usuario de la base de datos
+        db.session.delete(usuario)
+        db.session.commit()
+
+    # Confirmar que el usuario fue eliminado correctamente
+        return jsonify({'message': 'Usuario eliminado correctamente'}), 200
+
+    except ValueError:
+        # Devolver un error 400 si el ID proporcionado no es un número entero
+        return jsonify({'error': 'ID inválido, debe ser un número entero'}), 400
+
+    except Exception as e:
+        # Capturar cualquier otro error y devolver un error 500 con detalles adicionales
+        return jsonify({'error': f'Error en el servidor: {str(e)}'}), 500
 
 
 def get_all_usuarios():  # noqa: E501
@@ -221,7 +248,7 @@ def get_usuario_by_id(id_usuario):  # noqa: E501
     return usuarios_dict
 
 
-def update_usuario(id_usuario, usuario):  # noqa: E501
+def update_usuario(id_usuario):  # noqa: E501
     """Actualizar un usuario específico por su ID
 
     Actualiza la información de un usuario registrado en función del identificador proporcionado # noqa: E501
@@ -233,6 +260,43 @@ def update_usuario(id_usuario, usuario):  # noqa: E501
 
     :rtype: Union[Usuario, Tuple[Usuario, int], Tuple[Usuario, int, Dict[str, str]]
     """
-    if connexion.request.is_json:
-        usuario = Usuarios.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    try:  
+    # Obtener los datos de la solicitud JSON
+        data = connexion.request.get_json()
+        if not data:
+            return {"error": "No data provided"}, 400  # Código 400: No se proporcionaron datos
+        
+    # Buscar el usuario por ID
+        usuario = db.session.query(Usuarios).get(id_usuario)
+
+    # Actualizar solo los campos que fueron enviados en el cuerpo de la solicitud
+        if 'nombre' in data:
+            usuario.nombre = data['nombre']
+        
+        if 'rol' in data:          
+            # Validar el valor de 'rol' (comprobamos si es válido)
+            valid_rol = ['cliente']
+            if data['rol'] not in valid_rol:
+                return {"error": "Rol Invalido. Rol valido: cliente"}, 422  # Código 422: Rol no válido    
+            usuario.rol = data['rol']
+
+        if 'imagen' in data:
+            # Validar el valor de 'imagen' (comprobamos si es válido)    
+            valid_imagen = ['user1.jpg', 'user2.jpg', 'user3.jpg', 'user4.jpg', 'user5.jpg', 'user6.jpg']
+            if data['imagen'] not in valid_imagen:
+                return {"error": "Imagen Invalida. Imagenes validas: user1.jpg, user2.jpg, user3.jpg, user4.jpg, user5.jpg, user6.jpg"}, 422  # Código 422: Imagen no válida
+            usuario.imagen = data['imagen']
+
+        if 'contenidosfavoritos' in data:
+            usuario.contenidosfavoritos = data['contenidosfavoritos']            
+
+        # Guardar los cambios en la base de datos
+        db.session.commit()
+        
+        # Retornar el usuario actualizado como diccionario
+        return usuario.to_dict(), 200  # Código 200: Usuario actualizado exitosamente
+
+    except Exception as e:
+        # Otro tipo de error
+        return {"error": f"An error occurred: {str(e)}"}, 500  # Código 500: Error del servidor
+
