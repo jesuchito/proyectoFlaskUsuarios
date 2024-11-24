@@ -351,3 +351,24 @@ def update_usuario(id_usuario):  # noqa: E501
         # Otro tipo de error
         return {"error": f"An error occurred: {str(e)}"}, 500  # Código 500: Error del servidor
 
+def login_usuario(id_usuario):
+    try:
+        usuario = db.session.query(Usuarios).get(id_usuario)
+        if not usuario:
+            return {'error': 'Usuario no encontrado'}, 404
+
+        data_to_send = {
+            'contenidos_ids': usuario.contenidosfavoritos,
+        }
+
+        update_vista = 'http://localhost:8082/vista/Favoritos'
+
+        response = requests.put(update_vista, json=data_to_send)
+
+        if response.status_code == 200:
+            return usuario.to_dict(), 200
+        else:
+            return {'message': 'Favorito añadido, pero fallo en Vista', 'error': response.text}, response.status_code
+
+    except Exception as e:
+        return {'message': 'Ocurrió un error', 'error': str(e)}, 500
