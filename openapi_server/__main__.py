@@ -17,7 +17,7 @@ app.add_api('openapi.yaml',
             arguments={'title': 'Microservicio de Usuarios de una aplicación de tipo Netflix'},
             pythonic_params=True)
 
-app.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:12345@localhost:5433/Usuarios'
+app.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:12345@localhost:5432/Usuarios'
 
 "Comentar la conexión que no van a ocupar luego y, al hacer push al repositorio, no comentarizar esta conexión."
 #app.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://api_user:api_password@db:5432/api_database'
