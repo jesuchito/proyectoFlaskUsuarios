@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "cba50673-b748-4dd4-bfbc-b3bac57d088d",
+		"name": "Test_Api_Usuarios",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "39514666"
+	},
+	"item": [
+		{
+			"name": "Retorna el conjunto de usuarios registrados en la aplicación",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8081/usuario"
+			},
+			"response": []
+		},
+		{
+			"name": "Crea una nueva cuenta en la aplicación que estará asociada a un         nuevo usuario",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nombre\": \"lalo\",\n  \"rol\": \"cliente\",\n  \"imagen\": \"user1.jpg\",\n  \"contenidosfavoritos\": [1,2]\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8081/usuario"
+			},
+			"response": []
+		},
+		{
+			"name": "Elimina un usuario por su id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://127.0.0.1:8081/usuario/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Retorna la información de un usuario en función del identificador         proporcionado",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8081/usuario/1"
+	
+			},
+			"response": []
+		},
+		{
+			"name": "Actualiza la información de un usuario registrado en función del         identificador proporcionado",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"nombre\": \"Juan Pérez\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://127.0.0.1:8081/usuario/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Retorna el conjunto de contenidos multimedia favoritos de un usuario         específico en función de su identificador",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8081/usuario//ListaFavoritos"
+			},
+			"response": []
+		},
+		{
+			"name": "Elimina un contenido multimedia perteneciente al listado de contenidos         favoritos de un usuario específico en función de su identificador",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": "http://127.0.0.1:8081/usuario/1/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Retorna un contenido multimedia perteneciente al listado de contenidos         favoritos de un usuario específico en función de su identificador",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8081/usuario/1/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Añade un nuevo contenido al conjunto de contenidos multimedia favoritos         de un usuario específico en función de su identificador",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://127.0.0.1:8081/usuario/1/1"
+			},
+			"response": []
+		}
+	]
+}
