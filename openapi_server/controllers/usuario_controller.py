@@ -204,8 +204,8 @@ def get_all_usuarios():  # noqa: E501
 
     :rtype: Union[List[Usuario], Tuple[List[Usuario], int], Tuple[List[Usuario], int, Dict[str, str]]
     """
-    usuarios = Usuarios.query.all()
-    
+    usuarios = db.session.query(Usuarios).all()
+
     usuarios_favoritos = []
     for usuario in usuarios:
         favoritos = []
@@ -241,7 +241,7 @@ def get_contenido_favorito(id_usuario, contenido_favorito):  # noqa: E501
 
     :rtype: Union[Contenido, Tuple[Contenido, int], Tuple[Contenido, int, Dict[str, str]]
     """
-    usuario = Usuarios.query.filter_by(idusuario=id_usuario).first()
+    usuario = db.session.query(Usuarios).get(id_usuario)
     
     url = f'http://127.0.0.1:8080/contenido/{contenido_favorito}'
     response = requests.get(url)
@@ -263,7 +263,8 @@ def get_favoritos(id_usuario):  # noqa: E501
 
     :rtype: Union[List[Contenido], Tuple[List[Contenido], int], Tuple[List[Contenido], int, Dict[str, str]]
     """
-    usuario = Usuarios.query.filter_by(idusuario=id_usuario).first()
+    usuario = db.session.query(Usuarios).get(id_usuario)
+
     contenidos = []
     for id in usuario.contenidosfavoritos:
         url = f'http://127.0.0.1:8080/contenido/{id}'
@@ -286,7 +287,8 @@ def get_usuario_by_id(id_usuario):  # noqa: E501
 
     :rtype: Union[Usuario, Tuple[Usuario, int], Tuple[Usuario, int, Dict[str, str]]
     """
-    usuario = Usuarios.query.get_or_404(id_usuario)
+    usuario = db.session.query(Usuarios).get(id_usuario)
+
     usuarios_dict = {
         "idusuario": usuario.idusuario,
         "nombre": usuario.nombre,
