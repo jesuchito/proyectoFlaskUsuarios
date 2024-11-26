@@ -9,6 +9,5 @@ CREATE TABLE usuarios (
 
 
 --Insert Usuarios
-INSERT INTO usuarios VALUES (1,'Maria','administrador','imagen_administrador',ARRAY[1, 2, 5]);
-
-INSERT INTO usuarios VALUES (2,'Luis','cliente','imagen_cliente',ARRAY[2, 3]);
+INSERT INTO usuarios VALUES (1,'Maria','administrador','administrador.jpg',ARRAY[1, 2, 5]);
+INSERT INTO usuarios VALUES (2,'Luis','cliente','user2.jpg',ARRAY[2, 3]);

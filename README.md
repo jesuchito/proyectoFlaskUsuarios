@@ -104,11 +104,51 @@ La definición de OpenAPI está disponible en formato JSON en:
 http://localhost:8080/openapi.json
 ```
 
+
 ## Despliegue en Docker 
 
-Para desplegar la API en un contenedor Docker , Ejecute el siguiente comando 
+Este documento describe los pasos necesarios para desplegar una API dentro de un contenedor Docker utilizando `docker-compose`.
+
+---
+
+### Requisitos previos
+
+1. **Docker**: Asegúrate de tener instalado Docker en tu sistema. Puedes descargarlo desde [Docker](https://www.docker.com/).
+2. **docker-compose**: Comprueba que tienes instalado `docker-compose`. Si no, sigue las instrucciones de instalación [aquí](https://docs.docker.com/compose/install/).
+
+---
+
+### Pasos para el despliegue
+
+### Paso 1: Crear una red en Docker
+
+Antes de desplegar la API, necesitas crear una red específica para el proyecto. Esto permitirá que los contenedores se comuniquen entre sí.
+
+Ejecuta el siguiente comando en la terminal:
+
 ```bash
-# Construir e iniciar la imagen y el contenedor
+docker network create flask_network
+```
+
+### Paso 2: Construir e iniciar la API
+
+Para construir la imagen de Docker y poner en marcha los contenedores, sigue los pasos a continuación:
+
+Desde el directorio donde se encuentra el archivo `docker-compose.yml`, ejecuta el siguiente comando para construir las imágenes y levantar los contenedores:
+
+```bash
 docker-compose up --build
+```
+
+### Paso 3. Verificar el despliegue
+Una vez que los contenedores estén en funcionamiento, puedes verificar el estado de los servicios con el siguiente comando:
+
+```bash
+docker ps
+```
+
+## ¡Todo listo! 🚀
+
+Tu API ahora está en funcionamiento dentro de un contenedor Docker, junto con su base de datos y otros servicios asociados.
 
 
