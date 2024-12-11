@@ -2,10 +2,10 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:latest
+    image: postgres:17
     container_name: api_usuarios
     environment:
-      POSTGRES_USER: api_user
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: api_password
       POSTGRES_DB: api_database
     ports:
