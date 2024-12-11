@@ -11,6 +11,9 @@ from openapi_server import util
 from flask_sqlalchemy import SQLAlchemy
 from flask import jsonify, request, render_template, make_response
 
+API_CONTENIDOS = "proyectoflaskcontenidos-api_contenidos-1:8080"
+API_VISTAS = "proyectoflaskvistas-api_vistas-1:8082"
+
 db = SQLAlchemy()
 
 def import_db_controller(database):
@@ -40,12 +43,12 @@ def add_favorito(id_usuario, contenido_favorito):  # noqa: E501
         
         usuario.contenidosfavoritos = usuario.contenidosfavoritos + [contenido_favorito]
         db.session.commit()
-
+   
         data_to_send = {
             'contenidos_ids': usuario.contenidosfavoritos,
         }
 
-        update_vista = 'http://localhost:8082/vista/Favoritos'
+        update_vista = f'http://{API_VISTAS}/vista/Favoritos'
 
         response = requests.put(update_vista, json=data_to_send)
 
@@ -143,7 +146,7 @@ def delete_contenido_favorito(id_usuario, contenido_favorito):  # noqa: E501
             'contenidos_ids': usuario.contenidosfavoritos,
         }
 
-        update_vista = 'http://localhost:8082/vista/Favoritos'
+        update_vista = F'http://{API_VISTAS}/vista/Favoritos'
 
         response = requests.put(update_vista, json=data_to_send)
 
@@ -210,7 +213,7 @@ def get_all_usuarios():  # noqa: E501
     for usuario in usuarios:
         favoritos = []
         for id in usuario.contenidosfavoritos:
-            url = f'http://127.0.0.1:8080/contenido/{id}'
+            url = f'http://{API_CONTENIDOS}/contenido/{id}'
             response = requests.get(url)
             if response.status_code == 200:
                 favoritos.append(response.json())
@@ -243,7 +246,7 @@ def get_contenido_favorito(id_usuario, contenido_favorito):  # noqa: E501
     """
     usuario = db.session.query(Usuarios).get(id_usuario)
     
-    url = f'http://127.0.0.1:8080/contenido/{contenido_favorito}'
+    url = f'http://{API_CONTENIDOS}/contenido/{contenido_favorito}'
     response = requests.get(url)
     if response.status_code == 200:
         contenido = response.json()
@@ -267,7 +270,7 @@ def get_favoritos(id_usuario):  # noqa: E501
 
     contenidos = []
     for id in usuario.contenidosfavoritos:
-        url = f'http://127.0.0.1:8080/contenido/{id}'
+        url = f'http://{API_CONTENIDOS}/contenido/{id}'
         response = requests.get(url)
         if response.status_code == 200:
             contenidos.append(response.json())
@@ -363,7 +366,7 @@ def login_usuario(id_usuario):
             'contenidos_ids': usuario.contenidosfavoritos,
         }
 
-        update_vista = 'http://localhost:8082/vista/Favoritos'
+        update_vista = f'http://{API_VISTAS}/vista/Favoritos'
 
         response = requests.put(update_vista, json=data_to_send)
 

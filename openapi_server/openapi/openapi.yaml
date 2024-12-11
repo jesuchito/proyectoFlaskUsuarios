@@ -70,8 +70,7 @@ paths:
       x-openapi-router-controller: openapi_server.controllers.usuario_controller
   /usuario/{idUsuario}:
     delete:
-      description: Elimina un contenido multimedia específico de la aplicación en
-        función del identificador proporcionado
+      description: Elimina un usuario por su id
       operationId: delete_usuario
       parameters:
       - description: ID del usuario a borrar

@@ -24,7 +24,7 @@ jsonschema==4.23.0
 jsonschema-specifications==2024.10.1
 MarkupSafe==3.0.2
 packaging==24.1
-psycopg2==2.9.10
+psycopg2-binary==2.9.10
 python-dateutil==2.9.0.post0
 python-multipart==0.0.12
 PyYAML==6.0.2

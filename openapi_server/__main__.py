@@ -17,7 +17,11 @@ app.add_api('openapi.yaml',
             arguments={'title': 'Microservicio de Usuarios de una aplicación de tipo Netflix'},
             pythonic_params=True)
 
-app.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:12345@localhost:5432/Usuarios'
+#app.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:12345@localhost:5432/Usuarios'
+
+"Comentar la conexión que no van a ocupar luego y, al hacer push al repositorio, no comentarizar esta conexión."
+app.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://api_user:api_password@db:5432/api_database'
+
 app.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #esto es para que no se caiga a las 10 requests
 app.app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
@@ -32,4 +36,6 @@ db = SQLAlchemy(app.app)
 import_db_controller(db)
 import_db_usuario(db)
 
-app.run(port=8081)
+app.run(host='0.0.0.0', port=8081)
+
+
