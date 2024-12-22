@@ -20,15 +20,15 @@ app.add_api('openapi.yaml',
 #app.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:12345@localhost:5432/Usuarios'
 
 "Comentar la conexión que no van a ocupar luego y, al hacer push al repositorio, no comentarizar esta conexión."
-app.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:api_password@db:5432/api_database'
+app.app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://api_user:api_password@db_usuarios:5432/api_database'
 
 app.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 #esto es para que no se caiga a las 10 requests
 app.app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
-    'pool_size': 30,        # Tamaño máximo de conexiones en el pool
+    'pool_size': 350,        # Tamaño máximo de conexiones en el pool
     'pool_timeout': 30,     # Tiempo máximo de espera para obtener una conexión
-    'pool_recycle': 180,   # Tiempo máximo de vida de una conexión (en segundos)
-    'max_overflow': 5       # Conexiones extra que pueden crearse si se alcanza el pool_size
+    'pool_recycle': 30,   # Tiempo máximo de vida de una conexión (en segundos)
+    'max_overflow': 20       # Conexiones extra que pueden crearse si se alcanza el pool_size
 }
 
 db = SQLAlchemy(app.app)

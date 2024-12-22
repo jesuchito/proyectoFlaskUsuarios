@@ -1,17 +1,17 @@
-version: '3.8'
 
 services:
-  db:
+
+  db_usuarios:
     image: postgres:17
     container_name: api_usuarios
     environment:
-      POSTGRES_USER: postgres
+      POSTGRES_USER: api_user
       POSTGRES_PASSWORD: api_password
       POSTGRES_DB: api_database
     ports:
       - "5434:5432" # Ajuste correcto del puerto
     volumes:
-      - db_data:/var/lib/postgresql/data
+      - db_data_usuarios:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - flask_network # Conecta el servicio de base de datos a la red
@@ -22,12 +22,12 @@ services:
     ports:
       - "8081:8081"
     depends_on:
-      - db
+      - db_usuarios
     networks:
       - flask_network # Conecta la API a la red
 
 volumes:
-  db_data:
+  db_data_usuarios:
 
 networks:
   flask_network: # Define la red compartida
